@@ -174,7 +174,7 @@ test("exposes a per-request scope", async (t) => {
   server.route({
     method: "GET",
     path: "/",
-    handler(request) {
+    handler(request: any: any) {
       t.is(typeof request.sentryScope?.setTag, "function");
       return null;
     },
@@ -211,7 +211,7 @@ test("captures request errors", async (t) => {
     options: {
       client: {
         dsn,
-        beforeSend: (e): null => {
+        beforeSend: (e: any): null => {
           deferred.resolve(e);
           return null;
         },
@@ -250,7 +250,7 @@ test("parses request metadata", async (t) => {
     options: {
       client: {
         dsn,
-        beforeSend: (e): null => {
+        beforeSend: (e: any): null => {
           deferred.resolve(e);
           return null;
         },
@@ -311,7 +311,7 @@ test("sanitizes user info from auth", async (t) => {
     options: {
       client: {
         dsn,
-        beforeSend: (e): null => {
+        beforeSend: (e: any): null => {
           deferred.resolve(e);
           return null;
         },
@@ -347,7 +347,7 @@ test("process 'app' channel events with default tags", async (t) => {
   server.route({
     method: "GET",
     path: "/route",
-    handler(request) {
+    handler(request: any) {
       request.log(["error", "foo"], new Error("Oh no!"));
       return null;
     },
@@ -359,7 +359,7 @@ test("process 'app' channel events with default tags", async (t) => {
     options: {
       client: {
         dsn,
-        beforeSend: (e): null => {
+        beforeSend: (e: any): null => {
           deferred.resolve(e);
           return null;
         },
@@ -388,7 +388,7 @@ test("process 'app' channel events with `catchLogErrors` tags", async (t) => {
   server.route({
     method: "GET",
     path: "/route",
-    handler(request) {
+    handler(request: any) {
       request.log("exception", new Error("Oh no!"));
       return null;
     },
@@ -400,7 +400,7 @@ test("process 'app' channel events with `catchLogErrors` tags", async (t) => {
     options: {
       client: {
         dsn,
-        beforeSend: (e): null => {
+        beforeSend: (e: any): null => {
           deferred.resolve(e);
           return null;
         },
@@ -441,7 +441,7 @@ test("process 'log' events with default tags", async (t) => {
     options: {
       client: {
         dsn,
-        beforeSend: (e): null => {
+        beforeSend: (e: any): null => {
           deferred.resolve(e);
           return null;
         },
@@ -482,7 +482,7 @@ test("process 'log' events with `catchLogErrors` tags", async (t) => {
     options: {
       client: {
         dsn,
-        beforeSend: (e): null => {
+        beforeSend: (e: any): null => {
           deferred.resolve(e);
           return null;
         },
@@ -541,7 +541,7 @@ test("request scope separation", async (t) => {
           dsn,
           debug: true,
           transport: DummyTransport,
-          beforeSend: (event) => {
+          beforeSend: (event: any) => {
             if (event.transaction === "GET /one") {
               t.deepEqual(event.tags, {
                 globalTag: "global",
@@ -648,7 +648,7 @@ test("listener interceptors", async (t) => {
     options: {
       client: {
         dsn,
-        beforeSend: (e): null => {
+        beforeSend: (e: any): null => {
           deferred.resolve(e);
           return null;
         },

@@ -5,16 +5,16 @@ import domain = require("domain");
 import shimmer = require("shimmer");
 import eventsIntercept = require("events-intercept");
 import { logger, isString } from "@sentry/utils";
-import { extractTraceparentData, SpanStatus } from "@sentry/tracing";
-import { isAutoSessionTrackingEnabled, flush } from "@sentry/node/dist/sdk";
+import { extractTraceparentData } from "@sentry/tracing";
+import { isAutoSessionTrackingEnabled, flush } from "@sentry/node";
 import { RequestSessionStatus, Transaction, Span } from "@sentry/types";
-import { extractRequestData } from "@sentry/node/dist/handlers";
+import { extractRequestData } from "@sentry/node";
 import type * as SentryNamespace from "@sentry/node";
 import type { NodeOptions } from "@sentry/node";
 import type { Server } from "@hapi/hapi";
 import { z } from "zod";
 import type * as http from "http";
-import { ExpressRequest } from "@sentry/node/dist/handlers";
+import { ExpressRequest } from "@sentry/node";
 import { options as optionsSchema } from "./schema";
 import {
   extractPossibleSentryUserProperties,
@@ -211,7 +211,7 @@ async function register(server: Server, options: Options): Promise<void> {
         /*                               */
         scope.addEventProcessor((_sentryEvent) => {
           // format a sentry event from the request and triggered event
-          const sentryEvent = Sentry.Handlers.parseRequest(
+          const sentryEvent = Sentry.Handlers.addRequestDataToEvent(
             _sentryEvent,
             req as ExpressRequest
           );
@@ -333,7 +333,7 @@ async function register(server: Server, options: Options): Promise<void> {
       method: (request, h) => {
         const preHandlerSpan: Span = (request as any).__preHandlerSpan;
         if (preHandlerSpan) {
-          preHandlerSpan.setStatus(SpanStatus.Ok);
+          preHandlerSpan.setStatus(`Ok`);
           preHandlerSpan.finish();
 
           // Check that the current Scope is the preHandlerScope, and pop it if it is
@@ -370,7 +370,7 @@ async function register(server: Server, options: Options): Promise<void> {
         if (requestSpan) {
           requestSpan.finish();
           if (requestSpan.status === undefined) {
-            requestSpan.setStatus(SpanStatus.Ok);
+            requestSpan.setStatus(`Ok`);
           }
         }
 
@@ -502,7 +502,7 @@ async function register(server: Server, options: Options): Promise<void> {
         spans.map((span) => {
           if (span) {
             if (span.status === undefined) {
-              span.setStatus(SpanStatus.InternalError);
+              span.setStatus(`InternalError`);
             }
             if (span.endTimestamp === undefined) {
               span.finish();
@@ -519,7 +519,7 @@ async function register(server: Server, options: Options): Promise<void> {
     if (opts.tracing) {
       const postSpan: Span = (request as any).__postHandlerSpan;
       if (postSpan) {
-        postSpan.setStatus(SpanStatus.Ok);
+        postSpan.setStatus(`Ok`);
         postSpan.finish();
       }
 
@@ -532,7 +532,7 @@ async function register(server: Server, options: Options): Promise<void> {
         if ("statusCode" in request.response) {
           transaction.setHttpStatus(request.response.statusCode);
         } else {
-          transaction.setStatus(SpanStatus.Cancelled);
+          transaction.setStatus(`Cancelled`);
         }
         transaction.finish();
       }

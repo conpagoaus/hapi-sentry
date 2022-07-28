@@ -3,7 +3,6 @@ import { ExtractedNodeRequestData } from "@sentry/types";
 import { isString, normalize, stripUrlQueryAndFragment } from "@sentry/utils";
 import * as cookie from "cookie";
 import * as url from "url";
-import { string } from "@hapi/joi";
 
 // Based on @sentry/node express handler
 export function extractransactionName(

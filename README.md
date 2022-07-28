@@ -12,6 +12,7 @@ request error logging to [Sentry](https://sentry.io/).
 ## Usage
 
 Use the hapi plugin like this:
+
 ```JavaScript
 const server = hapi.server();
 await server.register({
@@ -23,9 +24,10 @@ await server.register({
 ```
 
 This setup will:
-* Initialize Sentry regularly, which should capture all global errors and unhandled promise rejects
-* Capture all unhandled exceptions thrown or returned in routes
-* Use request data and `request.auth.credentials` to enhance errors from routes
+
+- Initialize Sentry regularly, which should capture all global errors and unhandled promise rejects
+- Capture all unhandled exceptions thrown or returned in routes
+- Use request data and `request.auth.credentials` to enhance errors from routes
 
 You can use the following options to customize this behavior further.
 
@@ -33,27 +35,27 @@ You can use the following options to customize this behavior further.
 
 The plugin options, you can pass in while registering are the following:
 
-| property                  | type          | description                                                                                                                  |
-|:--------------------------|:--------------|:-----------------------------------------------------------------------------------------------------------------------------|
-| `baseUri`                 | string        | [uri](https://github.com/hapijs/joi/blob/master/API.md#stringurioptions) to be used as base for captured urls                |
-| `scope.tags`              | object        | An array of tags to be sent with every event                                                                                 |
-| `scope.tags.name`         | string        | The name of a tag                                                                                                            |
-| `scope.tags.value`        | any           | The value of a tag                                                                                                           |
-| `scope.extra`             | object        | An object of arbitrary format to be sent as extra data on every event                                                        |
-| `client`                  | object        | **required** A [@sentry/node](https://www.npmjs.com/package/@sentry/node) instance which was already initialized (using `Sentry.init`) OR an options object to be passed to an internally initialized [@sentry/node](https://www.npmjs.com/package/@sentry/node) (`client.dsn` is only required in the latter case) |
-| `client.dsn`              | string/false  | **required** The Dsn used to connect to Sentry and identify the project. If false, the SDK will not send any data to Sentry. |
-| `client.debug`            | boolean       | Turn debug mode on/off                                                                                                       |
-| `client.release`          | string        | Tag events with the version/release identifier of your application                                                           |
-| `client.environment`      | string        | The current environment of your application (e.g. `'production'`)                                                            |
-| `client.sampleRate`       | number        | A global sample rate to apply to all events (0 - 1)                                                                          |
-| `client.maxBreadcrumbs`   | number        | The maximum number of breadcrumbs sent with events. Default: `100`                                                           |
-| `client.attachStacktrace` | any           | Attaches stacktraces to pure capture message / log integrations                                                              |
-| `client.sendDefaultPii`   | boolean       | If this flag is enabled, certain personally identifiable information is added by active integrations                         |
-| `client.serverName`       | string        | Overwrite the server name (device name)                                                                                      |
-| `client.beforeSend`       | func          | A callback invoked during event submission, allowing to optionally modify the event before it is sent to Sentry              |
-| `client.beforeBreadcrumb` | func          | A callback invoked when adding a breadcrumb, allowing to optionally modify it before adding it to future events.             |
-| `trackUser`               | boolean       | Whether or not to track the user via the per-request scope. Default: `true`                                                  |
-| `catchLogErrors`          | boolean/array | Handles [capturing server.log and request.log events](#capturing-serverlog-and-requestlog-events). Default: `false`          |
+| property                  | type          | description                                                                                                                                                                                                                                                                                                                                                                             |
+| :------------------------ | :------------ | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `baseUri`                 | string        | [uri](https://github.com/hapijs/joi/blob/master/API.md#stringurioptions) to be used as base for captured urls                                                                                                                                                                                                                                                                           |
+| `scope.tags`              | object        | An array of tags to be sent with every event                                                                                                                                                                                                                                                                                                                                            |
+| `scope.tags.name`         | string        | The name of a tag                                                                                                                                                                                                                                                                                                                                                                       |
+| `scope.tags.value`        | any           | The value of a tag                                                                                                                                                                                                                                                                                                                                                                      |
+| `scope.extra`             | object        | An object of arbitrary format to be sent as extra data on every event                                                                                                                                                                                                                                                                                                                   |
+| `client`                  | object        | **required** A [@sentry/node](https://www.npmjs.com/package/@sentry/node) instance which was already initialized (using `Sentry.init`) OR an options object to be passed to an internally initialized [@sentry/node](https://www.npmjs.com/package/@sentry/node) (`client.dsn` is only required in the latter case)                                                                     |
+| `client.dsn`              | string/false  | **required** The Dsn used to connect to Sentry and identify the project. If false, the SDK will not send any data to Sentry.                                                                                                                                                                                                                                                            |
+| `client.debug`            | boolean       | Turn debug mode on/off                                                                                                                                                                                                                                                                                                                                                                  |
+| `client.release`          | string        | Tag events with the version/release identifier of your application                                                                                                                                                                                                                                                                                                                      |
+| `client.environment`      | string        | The current environment of your application (e.g. `'production'`)                                                                                                                                                                                                                                                                                                                       |
+| `client.sampleRate`       | number        | A global sample rate to apply to all events (0 - 1)                                                                                                                                                                                                                                                                                                                                     |
+| `client.maxBreadcrumbs`   | number        | The maximum number of breadcrumbs sent with events. Default: `100`                                                                                                                                                                                                                                                                                                                      |
+| `client.attachStacktrace` | any           | Attaches stacktraces to pure capture message / log integrations                                                                                                                                                                                                                                                                                                                         |
+| `client.sendDefaultPii`   | boolean       | If this flag is enabled, certain personally identifiable information is added by active integrations                                                                                                                                                                                                                                                                                    |
+| `client.serverName`       | string        | Overwrite the server name (device name)                                                                                                                                                                                                                                                                                                                                                 |
+| `client.beforeSend`       | func          | A callback invoked during event submission, allowing to optionally modify the event before it is sent to Sentry                                                                                                                                                                                                                                                                         |
+| `client.beforeBreadcrumb` | func          | A callback invoked when adding a breadcrumb, allowing to optionally modify it before adding it to future events.                                                                                                                                                                                                                                                                        |
+| `trackUser`               | boolean       | Whether or not to track the user via the per-request scope. Default: `true`                                                                                                                                                                                                                                                                                                             |
+| `catchLogErrors`          | boolean/array | Handles [capturing server.log and request.log events](#capturing-serverlog-and-requestlog-events). Default: `false`                                                                                                                                                                                                                                                                     |
 | `useDomainPerRequest`     | boolean       | Whether or not to use [Domains](https://nodejs.org/docs/latest-v12.x/api/domain.html) for seperating request processing. Only activate this feature, if you really need to seperate breadcrumbs, etc. of requests. It utilizes a deprecated Node.js feature which reduces [performance](https://github.com/hydra-newmedia/hapi-sentry/pull/21#issuecomment-574602486). Default: `false` |
 
 The `baseUri` option is used internally to get a correct URL in sentry issues.
@@ -68,13 +70,16 @@ The internally used client (initialized in either way) is accessible through
 
 ## Using your own Sentry instance
 
-You can pass a `Sentry` instance to  the `client` option if you already initialized your own like this:
+You can pass a `Sentry` instance to the `client` option if you already initialized your own like this:
 
 ```js
 const server = hapi.server();
-const Sentry = require('sentry');
-Sentry.init({ dsn: 'dsn-here' });
-await server.register({ plugin: require('hapi-sentry'), options: { client: Sentry } });
+const Sentry = require("sentry");
+Sentry.init({ dsn: "dsn-here" });
+await server.register({
+  plugin: require("hapi-sentry"),
+  options: { client: Sentry },
+});
 ```
 
 ## Scope
@@ -89,7 +94,7 @@ methods to add breadcrumbs, set extra, fingerprint or level information, etc. li
 server.route({
   method: 'GET',
   path: '/your/route',
-  handler(request) {
+  handler(request: any) {
     try {
       // ... some logic here
     } catch (error) {
@@ -104,11 +109,11 @@ server.route({
 
 You can enable capturing of `request.log` and `server.log` events using the `catchLogErrors` option.
 All events which are `Error` objects and are tagged by one of `['error', 'fatal', 'fail']` are
-automatically being tracked when `catchLogErrors` is set to `true`,  e.g.:
+automatically being tracked when `catchLogErrors` is set to `true`, e.g.:
 
 ```js
-request.log(['error', 'foo'], new Error('Oh no!'));
-server.log(['error', 'foo'], new Error('No no!'));
+request.log(["error", "foo"], new Error("Oh no!"));
+server.log(["error", "foo"], new Error("No no!"));
 ```
 
 The considered tags can be changed by setting `catchLogErrors` to a custom array of tags like
@@ -120,9 +125,9 @@ The considered tags can be changed by setting `catchLogErrors` to a custom array
 
 ```js
 server.ext({
-  type: 'onPostAuth',
+  type: "onPostAuth",
   method(request, h) {
-    request.payload && request.sentryScope.setExtra('payload', request.payload);
+    request.payload && request.sentryScope.setExtra("payload", request.payload);
     return h.continue;
   },
 });
